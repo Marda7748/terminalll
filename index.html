@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eDEX-UI iPad Terminal</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            background-color: #030706;
+            color: #00ffcc;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 10px;
+            height: 100vh;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 250px 1fr 250px;
+            grid-template-rows: 40px 1fr;
+            gap: 10px;
+        }
+
+        /* Scanline Effect (eDEX Atmosferi) */
+        body::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 6px 100%;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .panel {
+            border: 1px solid #00ffcc;
+            background: rgba(0, 20, 15, 0.4);
+            box-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
+            padding: 10px;
+            font-size: 12px;
+            overflow: hidden;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            border-bottom: 2px solid #00ffcc;
+        }
+
+        /* Left Sidebar - CPU/Hardware */
+        .left-panel .stat {
+            margin-bottom: 15px;
+        }
+        .bar {
+            border: 1px solid #00ffcc;
+            height: 12px;
+            margin-top: 4px;
+            background: rgba(0,0,0,0.5);
+            position: relative;
+        }
+        .bar-fill {
+            background: #00ffcc;
+            height: 100%;
+            width: 74%; /* Statik yükler */
+            box-shadow: 0 0 8px #00ffcc;
+        }
+
+        /* Center - Ana Terminal Ekranı */
+        .main-terminal {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            font-size: 14px;
+            background: rgba(0, 5, 4, 0.8);
+        }
+        .output {
+            overflow-y: auto;
+            margin-bottom: 5px;
+        }
+
+        /* Right Sidebar - Network/Logs */
+        .right-panel .log-line {
+            color: #ff3366; /* Hatalar kırmızımsı */
+            margin-bottom: 5px;
+        }
+        .right-panel .secure { color: #00ffcc; }
+
+        .blink { animation: blinker 1s linear infinite; }
+        @keyframes blinker { 50% { opacity: 0; } }
+    </style>
+</head>
+<body>
+
+    <!-- TOP BAR -->
+    <div class="panel top-bar">
+        <span>[ eDEX-UI v2.2.2_IPAD ]</span>
+        <span>SYS_STATUS: ONLINE</span>
+        <span>SECURE_NODE_7748</span>
+    </div>
+
+    <!-- LEFT PANEL: HARDWARE DATA -->
+    <div class="panel left-panel">
+        <h3 style="margin-top:0;">// HARDWARE</h3>
+        <div class="stat">
+            <div>CPU_CORE_01 [74%]</div>
+            <div class="bar"><div class="bar-fill" style="width: 74%;"></div></div>
+        </div>
+        <div class="stat">
+            <div>CPU_CORE_02 [42%]</div>
+            <div class="bar"><div class="bar-fill" style="width: 42%;"></div></div>
+        </div>
+        <div class="stat">
+            <div>RAM_USAGE [5.8GB / 8GB]</div>
+            <div class="bar"><div class="bar-fill" style="width: 72%;"></div></div>
+        </div>
+        <div class="stat">
+            <div>STORAGE [/dev/sda1]</div>
+            <div class="bar"><div class="bar-fill" style="width: 89%;"></div></div>
+        </div>
+    </div>
+
+    <!-- MAIN TERMINAL SCREEN -->
+    <div class="panel main-terminal">
+        <div class="output">
+            <div>Marda7748-OS v2.0 (tty1)</div>
+            <div>Welcome to core console. Type 'help' for cloud commands.</div>
+            <br>
+            <div>[root@gateway ~]# initializing file systems... OK</div>
+            <div>[root@gateway ~]# binding network protocols... DONE</div>
+            <div>[root@gateway ~]# mounting secure virtual drive... SUCCESS</div>
+            <div>[root@gateway ~]# _ <span class="blink">■</span></div>
+        </div>
+    </div>
+
+    <!-- RIGHT PANEL: NETWORK LOGS -->
+    <div class="panel right-panel">
+        <h3 style="margin-top:0;">// NETWORK LOGS</h3>
+        <div class="log-line secure">[OK] INBOUND: Port 22 open</div>
+        <div class="log-line secure">[OK] SYNC: GitHub Pages active</div>
+        <div class="log-line">[WARN] TRACE: Blocked ping from 192.168.1.1</div>
+        <div class="log-line secure">[INFO] ENCRYPTION: AES-256 Enabled</div>
+    </div>
+
+</body>
+</html>
