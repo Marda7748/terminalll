@@ -4,105 +4,262 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>eDEX-UI Simülasyon Arayüzü</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        /* CSS KODLARI HTML İÇİNE ENTEGRE EDİLDİ */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #0c1017;
+            color: #a2b0be;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 12px;
+            height: 100vh;
+            overflow: hidden;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* ÜST PANEL */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #1a2f3f;
+            padding-bottom: 8px;
+            color: #00d2ff;
+            text-shadow: 0 0 5px rgba(0, 210, 255, 0.5);
+        }
+
+        .time-display {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        /* ANA İÇERİK */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 15px;
+            flex-grow: 1;
+            margin: 10px 0;
+            height: calc(100vh - 220px); /* Klavye ve üst bara göre dinamik yükseklik */
+        }
+
+        /* SOL PANEL */
+        .left-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            overflow-y: auto;
+        }
+
+        .widget {
+            border: 1px solid #1a2f3f;
+            background: rgba(16, 26, 36, 0.5);
+            padding: 10px;
+        }
+
+        .widget h3 {
+            color: #58a6ff;
+            font-size: 11px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .chart-placeholder {
+            color: #00ff66;
+            font-weight: bold;
+        }
+
+        .process-list {
+            list-style: none;
+        }
+
+        .process-list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 2px 0;
+            border-bottom: 1px dashed #21262d;
+        }
+
+        .file-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 5px;
+        }
+
+        .file-icon {
+            background: #161b22;
+            padding: 4px;
+            border: 1px solid #30363d;
+            text-align: center;
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        .file-icon:hover {
+            background: #00d2ff;
+            color: #000;
+        }
+
+        /* SAĞ PANEL (TERMİNAL) */
+        .terminal {
+            border: 1px solid #1a2f3f;
+            background: rgba(5, 10, 15, 0.8);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .terminal-header {
+            background: #161b22;
+            color: #00d2ff;
+            padding: 5px 10px;
+            font-weight: bold;
+            border-bottom: 1px solid #1a2f3f;
+        }
+
+        .matrix-stream {
+            padding: 10px;
+            color: #8b949e;
+            line-height: 1.4;
+            font-size: 11px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+
+        /* ALT PANEL (SANAL KLAVYE) */
+        .keyboard-panel {
+            border-top: 1px solid #1a2f3f;
+            padding-top: 10px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .keyboard {
+            display: grid;
+            grid-template-columns: repeat(15, 1fr);
+            gap: 4px;
+            width: 100%;
+            max-width: 950px;
+        }
+
+        .key {
+            background: #111820;
+            border: 1px solid #30363d;
+            color: #58a6ff;
+            text-align: center;
+            padding: 8px 0;
+            border-radius: 3px;
+            font-weight: bold;
+            font-size: 10px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .key:hover {
+            background: #58a6ff;
+            color: #000;
+            box-shadow: 0 0 8px rgba(88, 166, 255, 0.8);
+        }
+
+        /* Özel Genişlikteki Tuşlar */
+        .key.wide-tab { grid-column: span 1.5; }
+        .key.wide-caps { grid-column: span 1.8; }
+        .key.wide-shift { grid-column: span 2.3; }
+        .key.wide-enter { grid-column: span 2.2; }
+        .key.wide-back { grid-column: span 2; }
+        .key.spacebar { grid-column: span 6; background: #161b22; }
+    </style>
 </head>
 <body>
 
-    <div class="container">
-        <header class="top-bar">
-            <div class="brand">PANEL // SYSTEM</div>
-            <div class="time-display">20:31:36</div>
-            <div class="network-status">ONLINE // 194.187.249.35</div>
-        </header>
+    <!-- ÜST PANEL -->
+    <header class="top-bar">
+        <div class="brand">PANEL // SYSTEM</div>
+        <div class="time-display">20:31:36</div>
+        <div class="network-status">ONLINE // 194.187.249.35</div>
+    </header>
 
-        <main class="main-content">
-            
-            <section class="left-panel">
-                <div class="widget">
-                    <h3>CPU USAGE (Intel Core i5-4200M)</h3>
-                    <div class="chart-placeholder">[ ||||||||||||||||||||| 55% ]</div>
-                </div>
-                
-                <div class="widget">
-                    <h3>MEMORY (USING 3.5GB OUT OF 7.7GB)</h3>
-                    <div class="chart-placeholder">[ |||||||||||| 45% ]</div>
-                </div>
-
-                <div class="widget">
-                    <h3>TOP PROCESSES</h3>
-                    <ul class="process-list">
-                        <li><span>edex-ui</span> <span>29.4%</span></li>
-                        <li><span>gnome-shell</span> <span>4.4%</span></li>
-                        <li><span>Xorg</span> <span>2.5%</span></li>
-                    </ul>
-                </div>
-                
-                <div class="widget filesystem">
-                    <h3>FILESYSTEM</h3>
-                    <div class="file-grid">
-                        <div class="file-icon">📁 en-US</div>
-                        <div class="file-icon">📁 de-DE</div>
-                        <div class="file-icon">📁 fr-FR</div>
-                        <div class="file-icon">📁 tr-TR</div>
-                    </div>
-                </div>
-            </section>
-
-            <section class="right-panel terminal">
-                <div class="terminal-header">MAIN - fish</div>
-                <div class="matrix-stream">
-                    + 0i ; Y @ R ! ] / x % 1 { P _ f @ \ 5 p ] / <br>
-                    C b ! : $ " P ? 1 d P 3 n d b = 5 $ e i Z B <br>
-                    D ! 1 : T p 9 @ 8 G K I 1 # O n : O , z p 9 N<br>
-                    x X K B q a } A S 7 D G { V J 9 K $ & M d 4 k<br>
-                    D * E } a 8 ? { 3 t u { H J V A r j z @ = J 4<br>
-                    h K w Z B 3 e ] h d 6 P S & g @ @ i o & Q z x }<br>
-                    ] n 3 E m w s , O h m c 7 d Q n + z ; F N<br>
-                    Q * J G ( a 8 ^ G { J S v T U T S B } R & 8 N<br>
-                    8 8 L U + l F G o e v t ) d u Q F p 5 @ ] # #<br>
-                    @ < e } a } a + > l h ) j y R 7 = e l C w W N<br>
-                    # } , A Z c i < d d 1 x 1 t * J M 9 J 7 K K<br>
-                    X F Y % . V F Y R t W Y 4 z u 5 A X q 1 K p g<br>
-                    s o @ b ] / i a H g } C Z = M $ A ! + c Q Y X<br>
-                    A ? g w f # m p a 5 V f 0 , _ V . U J H $ {<br>
-                    @ % _ _ > % L b d < p N h v n x X / m Y P - X E /<br>
-                    X 1 & ] X 4 5 D 8 q F . T n ( ) P r { B 1 6 L<br>
-                    * J * C R > f } e @ e w * k $ q c D @
-                </div>
-            </section>
-        </main>
-
-        <footer class="keyboard-panel">
-            <div class="keyboard">
-                <div class="key">ESC</div>
-                <div class="key">1</div><div class="key">2</div><div class="key">3</div><div class="key">4</div>
-                <div class="key">5</div><div class="key">6</div><div class="key">7</div><div class="key">8</div>
-                <div class="key">9</div><div class="key">0</div>
-                <div class="key wide">BACK</div>
-                
-                <div class="key wide">TAB</div>
-                <div class="key">Q</div><div class="key">W</div><div class="key">E</div><div class="key">R</div>
-                <div class="key">T</div><div class="key">Y</div><div class="key">U</div><div class="key">I</div>
-                <div class="key">O</div><div class="key">P</div>
-                <div class="key wide">ENTER</div>
-
-                <div class="key wide">CAPS</div>
-                <div class="key">A</div><div class="key">S</div><div class="key">D</div><div class="key">F</div>
-                <div class="key">G</div><div class="key">H</div><div class="key">J</div><div class="key">K</div>
-                <div class="key">L</div>
-                <div class="key-placeholder"></div>
-
-                <div class="key wide">SHIFT</div>
-                <div class="key">Z</div><div class="key">X</div><div class="key">C</div><div class="key">V</div>
-                <div class="key">B</div><div class="key">N</div><div class="key">M</div>
-                <div class="key wide">SHIFT</div>
-
-                <div class="key">CTRL</div><div class="key">FN</div>
-                <div class="key spacebar">SPACEBAR</div>
-                <div class="key">ALT</div><div class="key">CTRL</div>
+    <!-- ANA İÇERİK -->
+    <main class="main-content">
+        
+        <!-- SOL BÖLÜM -->
+        <section class="left-panel">
+            <div class="widget">
+                <h3>CPU USAGE (Intel Core i5-4200M)</h3>
+                <div class="chart-placeholder">[ ||||||||||||||||||||| 55% ]</div>
             </div>
-        </footer>
-    </div>
+            
+            <div class="widget">
+                <h3>MEMORY (USING 3.5GB / 7.7GB)</h3>
+                <div class="chart-placeholder">[ |||||||||||| 45% ]</div>
+            </div>
+
+            <div class="widget">
+                <h3>TOP PROCESSES</h3>
+                <ul class="process-list">
+                    <li><span>edex-ui</span> <span>29.4%</span></li>
+                    <li><span>gnome-shell</span> <span>4.4%</span></li>
+                    <li><span>Xorg</span> <span>2.5%</span></li>
+                </ul>
+            </div>
+            
+            <div class="widget">
+                <h3>FILESYSTEM</h3>
+                <div class="file-grid">
+                    <div class="file-icon">📁 en-US.json</div>
+                    <div class="file-icon">📁 de-DE.json</div>
+                    <div class="file-icon">📁 fr-FR.json</div>
+                    <div class="file-icon">📁 tr-TR.json</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SAĞ BÖLÜM (TERMİNAL) -->
+        <section class="terminal">
+            <div class="terminal-header">MAIN - fish</div>
+            <div class="matrix-stream">- 0i ; Y @ R ! ] / x % 1 { P _ f @ \ 5 p ] /
+C b ! : $ " P ? 1 d P 3 n d b = 5 $ e i Z B
+D ! 1 : T p 9 @ 8 G K I 1 # O n : O , z p 9 N
+x X K B q a } A S 7 D G { V J 9 K $ & M d 4 k
+D * E } a 8 ? { 3 t u { H J V A r j z @ = J 4
+h K w Z B 3 e ] h d 6 P S & g @ @ i o & Q z x
+] n 3 E m w s , O h m c 7 d Q n + z ; F N
+Q * J G ( a 8 ^ G { J S v T U T S B } R & 8 N
+8 8 L U + l F G o e v t ) d u Q F p 5 @ ] #
+@ < e } a } a + > l h ) j y R 7 = e l C w W
+# } , A Z c i < d d 1 x 1 t * J M 9 J 7 K K
+X F Y % . V F Y R t W Y 4 z u 5 A X q 1 K p g
+s o @ b ] / i a H g } C Z = M $ A ! + c Q Y X</div>
+        </section>
+    </main>
+
+    <!-- ALT PANEL (KLAVYE) -->
+    <footer class="keyboard-panel">
+        <div class="keyboard">
+            <!-- Satır 1 -->
+            <div class="key">ESC</div><div class="key">1</div><div class="key">2</div><div class="key">3</div><div class="key">4</div><div class="key">5</div><div class="key">6</div><div class="key">7</div><div class="key">8</div><div class="key">9</div><div class="key">0</div><div class="key text">?</div><div class="key text">-</div><div class="key wide-back">BACK</div>
+            
+            <!-- Satır 2 -->
+            <div class="key wide-tab">TAB</div><div class="key">Q</div><div class="key">W</div><div class="key">E</div><div class="key">R</div><div class="key">T</div><div class="key">Y</div><div class="key">U</div><div class="key">I</div><div class="key">O</div><div class="key">P</div><div class="key">Ğ</div><div class="key">Ü</div><div class="key wide-enter">ENTER</div>
+
+            <!-- Satır 3 -->
+            <div class="key wide-caps">CAPS</div><div class="key">A</div><div class="key">S</div><div class="key">D</div><div class="key">F</div><div class="key">G</div><div class="key">H</div><div class="key">J</div><div class="key">K</div><div class="key">L</div><div class="key">Ş</div><div class="key">İ</div><div class="key">,</div>
+
+            <!-- Satır 4 -->
+            <div class="key wide-shift">SHIFT</div><div class="key">Z</div><div class="key">X</div><div class="key">C</div><div class="key">V</div><div class="key">B</div><div class="key">N</div><div class="key">M</div><div class="key">Ö</div><div class="key">Ç</div><div class="key">.</div><div class="key wide-shift">SHIFT</div>
+
+            <!-- Satır 5 -->
+            <div class="key">CTRL</div><div class="key">FN</div><div class="key">WIN</div><div class="key spacebar">SPACEBAR</div><div class="key">ALT</div><div class="key">CTRL</div><div class="key">◀</div><div class="key">▼</div><div class="key">▶</div>
+        </div>
+    </footer>
 
 </body>
 </html>
