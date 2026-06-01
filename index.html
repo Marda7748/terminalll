@@ -3,146 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>eDEX-UI iPad Terminal</title>
-    <style>
-        * { box-sizing: border-box; }
-        body {
-            background-color: #030706;
-            color: #00ffcc;
-            font-family: 'Courier New', Courier, monospace;
-            margin: 0;
-            padding: 10px;
-            height: 100vh;
-            overflow: hidden;
-            display: grid;
-            grid-template-columns: 250px 1fr 250px;
-            grid-template-rows: 40px 1fr;
-            gap: 10px;
-        }
-
-        /* Scanline Effect (eDEX Atmosferi) */
-        body::before {
-            content: " ";
-            display: block;
-            position: absolute;
-            top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            background-size: 100% 4px, 6px 100%;
-            z-index: 10;
-            pointer-events: none;
-        }
-
-        .panel {
-            border: 1px solid #00ffcc;
-            background: rgba(0, 20, 15, 0.4);
-            box-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
-            padding: 10px;
-            font-size: 12px;
-            overflow: hidden;
-        }
-
-        /* Top Bar */
-        .top-bar {
-            grid-column: 1 / -1;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: bold;
-            border-bottom: 2px solid #00ffcc;
-        }
-
-        /* Left Sidebar - CPU/Hardware */
-        .left-panel .stat {
-            margin-bottom: 15px;
-        }
-        .bar {
-            border: 1px solid #00ffcc;
-            height: 12px;
-            margin-top: 4px;
-            background: rgba(0,0,0,0.5);
-            position: relative;
-        }
-        .bar-fill {
-            background: #00ffcc;
-            height: 100%;
-            width: 74%; /* Statik yükler */
-            box-shadow: 0 0 8px #00ffcc;
-        }
-
-        /* Center - Ana Terminal Ekranı */
-        .main-terminal {
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            font-size: 14px;
-            background: rgba(0, 5, 4, 0.8);
-        }
-        .output {
-            overflow-y: auto;
-            margin-bottom: 5px;
-        }
-
-        /* Right Sidebar - Network/Logs */
-        .right-panel .log-line {
-            color: #ff3366; /* Hatalar kırmızımsı */
-            margin-bottom: 5px;
-        }
-        .right-panel .secure { color: #00ffcc; }
-
-        .blink { animation: blinker 1s linear infinite; }
-        @keyframes blinker { 50% { opacity: 0; } }
-    </style>
+    <title>eDEX-UI Simülasyon Arayüzü</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- TOP BAR -->
-    <div class="panel top-bar">
-        <span>[ eDEX-UI v2.2.2_IPAD ]</span>
-        <span>SYS_STATUS: ONLINE</span>
-        <span>SECURE_NODE_7748</span>
-    </div>
+    <div class="container">
+        <header class="top-bar">
+            <div class="brand">PANEL // SYSTEM</div>
+            <div class="time-display">20:31:36</div>
+            <div class="network-status">ONLINE // 194.187.249.35</div>
+        </header>
 
-    <!-- LEFT PANEL: HARDWARE DATA -->
-    <div class="panel left-panel">
-        <h3 style="margin-top:0;">// HARDWARE</h3>
-        <div class="stat">
-            <div>CPU_CORE_01 [74%]</div>
-            <div class="bar"><div class="bar-fill" style="width: 74%;"></div></div>
-        </div>
-        <div class="stat">
-            <div>CPU_CORE_02 [42%]</div>
-            <div class="bar"><div class="bar-fill" style="width: 42%;"></div></div>
-        </div>
-        <div class="stat">
-            <div>RAM_USAGE [5.8GB / 8GB]</div>
-            <div class="bar"><div class="bar-fill" style="width: 72%;"></div></div>
-        </div>
-        <div class="stat">
-            <div>STORAGE [/dev/sda1]</div>
-            <div class="bar"><div class="bar-fill" style="width: 89%;"></div></div>
-        </div>
-    </div>
+        <main class="main-content">
+            
+            <section class="left-panel">
+                <div class="widget">
+                    <h3>CPU USAGE (Intel Core i5-4200M)</h3>
+                    <div class="chart-placeholder">[ ||||||||||||||||||||| 55% ]</div>
+                </div>
+                
+                <div class="widget">
+                    <h3>MEMORY (USING 3.5GB OUT OF 7.7GB)</h3>
+                    <div class="chart-placeholder">[ |||||||||||| 45% ]</div>
+                </div>
 
-    <!-- MAIN TERMINAL SCREEN -->
-    <div class="panel main-terminal">
-        <div class="output">
-            <div>Marda7748-OS v2.0 (tty1)</div>
-            <div>Welcome to core console. Type 'help' for cloud commands.</div>
-            <br>
-            <div>[root@gateway ~]# initializing file systems... OK</div>
-            <div>[root@gateway ~]# binding network protocols... DONE</div>
-            <div>[root@gateway ~]# mounting secure virtual drive... SUCCESS</div>
-            <div>[root@gateway ~]# _ <span class="blink">■</span></div>
-        </div>
-    </div>
+                <div class="widget">
+                    <h3>TOP PROCESSES</h3>
+                    <ul class="process-list">
+                        <li><span>edex-ui</span> <span>29.4%</span></li>
+                        <li><span>gnome-shell</span> <span>4.4%</span></li>
+                        <li><span>Xorg</span> <span>2.5%</span></li>
+                    </ul>
+                </div>
+                
+                <div class="widget filesystem">
+                    <h3>FILESYSTEM</h3>
+                    <div class="file-grid">
+                        <div class="file-icon">📁 en-US</div>
+                        <div class="file-icon">📁 de-DE</div>
+                        <div class="file-icon">📁 fr-FR</div>
+                        <div class="file-icon">📁 tr-TR</div>
+                    </div>
+                </div>
+            </section>
 
-    <!-- RIGHT PANEL: NETWORK LOGS -->
-    <div class="panel right-panel">
-        <h3 style="margin-top:0;">// NETWORK LOGS</h3>
-        <div class="log-line secure">[OK] INBOUND: Port 22 open</div>
-        <div class="log-line secure">[OK] SYNC: GitHub Pages active</div>
-        <div class="log-line">[WARN] TRACE: Blocked ping from 192.168.1.1</div>
-        <div class="log-line secure">[INFO] ENCRYPTION: AES-256 Enabled</div>
+            <section class="right-panel terminal">
+                <div class="terminal-header">MAIN - fish</div>
+                <div class="matrix-stream">
+                    + 0i ; Y @ R ! ] / x % 1 { P _ f @ \ 5 p ] / <br>
+                    C b ! : $ " P ? 1 d P 3 n d b = 5 $ e i Z B <br>
+                    D ! 1 : T p 9 @ 8 G K I 1 # O n : O , z p 9 N<br>
+                    x X K B q a } A S 7 D G { V J 9 K $ & M d 4 k<br>
+                    D * E } a 8 ? { 3 t u { H J V A r j z @ = J 4<br>
+                    h K w Z B 3 e ] h d 6 P S & g @ @ i o & Q z x }<br>
+                    ] n 3 E m w s , O h m c 7 d Q n + z ; F N<br>
+                    Q * J G ( a 8 ^ G { J S v T U T S B } R & 8 N<br>
+                    8 8 L U + l F G o e v t ) d u Q F p 5 @ ] # #<br>
+                    @ < e } a } a + > l h ) j y R 7 = e l C w W N<br>
+                    # } , A Z c i < d d 1 x 1 t * J M 9 J 7 K K<br>
+                    X F Y % . V F Y R t W Y 4 z u 5 A X q 1 K p g<br>
+                    s o @ b ] / i a H g } C Z = M $ A ! + c Q Y X<br>
+                    A ? g w f # m p a 5 V f 0 , _ V . U J H $ {<br>
+                    @ % _ _ > % L b d < p N h v n x X / m Y P - X E /<br>
+                    X 1 & ] X 4 5 D 8 q F . T n ( ) P r { B 1 6 L<br>
+                    * J * C R > f } e @ e w * k $ q c D @
+                </div>
+            </section>
+        </main>
+
+        <footer class="keyboard-panel">
+            <div class="keyboard">
+                <div class="key">ESC</div>
+                <div class="key">1</div><div class="key">2</div><div class="key">3</div><div class="key">4</div>
+                <div class="key">5</div><div class="key">6</div><div class="key">7</div><div class="key">8</div>
+                <div class="key">9</div><div class="key">0</div>
+                <div class="key wide">BACK</div>
+                
+                <div class="key wide">TAB</div>
+                <div class="key">Q</div><div class="key">W</div><div class="key">E</div><div class="key">R</div>
+                <div class="key">T</div><div class="key">Y</div><div class="key">U</div><div class="key">I</div>
+                <div class="key">O</div><div class="key">P</div>
+                <div class="key wide">ENTER</div>
+
+                <div class="key wide">CAPS</div>
+                <div class="key">A</div><div class="key">S</div><div class="key">D</div><div class="key">F</div>
+                <div class="key">G</div><div class="key">H</div><div class="key">J</div><div class="key">K</div>
+                <div class="key">L</div>
+                <div class="key-placeholder"></div>
+
+                <div class="key wide">SHIFT</div>
+                <div class="key">Z</div><div class="key">X</div><div class="key">C</div><div class="key">V</div>
+                <div class="key">B</div><div class="key">N</div><div class="key">M</div>
+                <div class="key wide">SHIFT</div>
+
+                <div class="key">CTRL</div><div class="key">FN</div>
+                <div class="key spacebar">SPACEBAR</div>
+                <div class="key">ALT</div><div class="key">CTRL</div>
+            </div>
+        </footer>
     </div>
 
 </body>
